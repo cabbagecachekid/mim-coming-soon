@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- CHANGE: page title shown in the browser tab -->
+<title>MIM — coming soon</title>
+
+<!-- CHANGE: shows in search results + link previews. Kept vague on purpose. -->
+<meta name="description" content="Banks see accounts. People see intentions.">
+
+<!-- favicon: inline SVG, no separate file needed -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23070b10'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='17' fill='%23e9eef2' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
+
+<!-- social share card (Open Graph + Twitter). CHANGE the URLs if the repo/site path changes. -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="MIM — coming soon">
+<meta property="og:description" content="Banks see accounts. People see intentions.">
+<meta property="og:url" content="https://cabbagecachekid.github.io/mim-coming-soon/">
+<meta property="og:image" content="https://cabbagecachekid.github.io/mim-coming-soon/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MIM — coming soon">
+<meta name="twitter:description" content="Banks see accounts. People see intentions.">
+<meta name="twitter:image" content="https://cabbagecachekid.github.io/mim-coming-soon/og.png">
+
+<style>
+  /* ---- palette: the well ---- */
+  :root {
+    --bg:      #070b10;   /* CHANGE: page background (deep near-black) */
+    --pool:    #143038;   /* CHANGE: glow color rising from the well */
+    --ink:     #e9eef2;   /* main text */
+    --muted:   #7d8b97;   /* quiet text */
+    --hair:    #1d2730;   /* hairlines / borders */
+    --told:    #5fb98e;   /* confidence dot: told */
+    --infer:   #d6a85f;   /* confidence dot: inferring */
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* the pool of light — sits behind everything, breathing slowly */
+  body::before {
+    content: "";
+    position: fixed;
+    left: 50%;
+    top: 55%;
+    transform: translate(-50%, -50%);
+    width: 110vmax;
+    height: 110vmax;
+    background: radial-gradient(circle at center,
+                var(--pool) 0%,
+                rgba(20,48,56,0.30) 30%,
+                transparent 60%);
+    opacity: 0.5;
+    filter: blur(10px);
+    animation: breathe 11s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+  @keyframes breathe {
+    0%, 100% { opacity: 0.40; transform: translate(-50%, -50%) scale(1); }
+    50%      { opacity: 0.58; transform: translate(-50%, -50%) scale(1.05); }
+  }
+
+  /* ---- split layout ---- */
+  .wrap {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    min-height: 100vh;
+  }
+  .panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem clamp(1.5rem, 5vw, 4rem);
+  }
+
+  /* left: hero, with footer pinned to the bottom of the panel */
+  .hero { display: grid; grid-template-rows: 1fr auto; text-align: center; }
+  .hero-inner {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    max-width: 30rem;
+  }
+
+  /* right: the form */
+  .form-panel { border-left: 1px solid var(--hair); }
+
+  /* wordmark */
+  .mark {
+    font-size: clamp(2.8rem, 8vw, 5rem);
+    font-weight: 300;
+    letter-spacing: 0.42em;
+    text-indent: 0.42em; /* optical centering for the wide tracking */
+    text-shadow: 0 0 28px rgba(95,185,142,0.18);
+  }
+
+  .tagline {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.2rem, 3.2vw, 1.8rem);
+    line-height: 1.45;
+    font-weight: 400;
+  }
+  .tagline span { color: var(--muted); }
+
+  .hair { width: 3.5rem; height: 1px; background: var(--hair); margin: 0.1rem 0; }
+
+  .soon {
+    font-size: 0.74rem;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* embedded Airtable FORM (never a Grid view — that would expose data) */
+  .signup {
+    width: 100%;
+    max-width: 30rem;
+    border: 1px solid var(--hair);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 16px 50px rgba(0,0,0,0.45);
+  }
+  .signup iframe { display: block; width: 100%; border: 0; }
+
+  /* footer: confidence-dot signature + attribution */
+  footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.7rem;
+    padding-top: 2rem;
+  }
+  footer a { color: var(--muted); text-decoration: none; font-size: 0.74rem; letter-spacing: 0.04em; }
+  footer a:hover { color: var(--ink); }
+  .copyright { color: #4f5a64; font-size: 0.62rem; letter-spacing: 0.08em; }
+
+  /* ---- gentle fade-up on load ---- */
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  .rise { opacity: 0; animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) forwards; }
+  .d1 { animation-delay: 0.05s; }
+  .d2 { animation-delay: 0.15s; }
+  .d3 { animation-delay: 0.25s; }
+  .d4 { animation-delay: 0.35s; }
+  .d5 { animation-delay: 0.55s; }
+  @media (prefers-reduced-motion: reduce) {
+    .rise { animation: none; opacity: 1; }
+  }
+
+  /* ---- mobile: stack the two panels ---- */
+  @media (max-width: 820px) {
+    .wrap { grid-template-columns: 1fr; }
+    .hero { padding-top: 9vh; gap: 2rem; }
+    .form-panel { border-left: none; border-top: 1px solid var(--hair); padding-bottom: 4rem; }
+    footer { padding-top: 2.5rem; }
+  }
+</style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <!-- LEFT: hero -->
+    <section class="panel hero">
+      <div class="hero-inner">
+        <!-- CHANGE: the wordmark -->
+        <div class="mark rise d1">MIM</div>
+        <!-- CHANGE: the tagline. The faded second line uses <span>. -->
+        <p class="tagline rise d2">Banks see accounts.<br><span>People see intentions.</span></p>
+        <div class="hair rise d3"></div>
+        <div class="soon rise d3">Coming soon</div>
+      </div>
+      <footer class="rise d5">
+        <div class="hair" aria-hidden="true"></div>
+        <!-- CHANGE: your attribution + link -->
+        <a href="https://caitlinnielsonux.com" target="_blank" rel="noopener">By Caitlin Nielson</a>
+        <small class="copyright">© 2026 · All rights reserved</small>
+      </footer>
+    </section>
+
+    <!-- RIGHT: signup form -->
+    <section class="panel form-panel">
+      <!--
+        EMAIL SIGNUP → embedded Airtable form.
+        CHANGE: to swap the form, replace the iframe src with a new Form view
+        "Share form → Embed" URL (ends in /form). A form embed shows only the
+        blank form, never your base data. Never use a Grid view embed here.
+      -->
+      <div class="signup rise d4">
+        <iframe
+          class="airtable-embed"
+          src="https://airtable.com/embed/appLjceFlpzPeAbry/pagZeXge8W53zVH8k/form"
+          title="Notify me when MIM launches"
+          width="100%"
+          height="533"
+          loading="lazy"
+          style="background: transparent;"></iframe>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>
